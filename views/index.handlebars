@@ -1,14 +1,26 @@
+
 <form action="/search" method="get">
+  <select name="region">
+    <option value="na" selected>NA</option>
+    <option value="br">BR</option>
+    <option value="eune">EUNE</option>
+    <option value="euw">EUW</option>
+    <option value="kr">KR</option>
+    <option value="lan">LAN</option>
+    <option value="las">LAS</option>
+    <option value="oce">OCE</option>
+    <option value="tr">TR</option>
+    <option value="ru">RU</option>
+  </select>
   <input type="text" id="summoner" name="summoner" placeholder="Summoner Name">
 </form>
 <ul>
-  <li>{{info.id}}</li>
-  <li>{{info.name}}</li>
+  {{info.name}}
 
   <ul class="info.summId">
   	{{#each info.participants}}
   	<li>{{teamId}} {{summName}}: {{championName}}</li>
   	{{/each}}
   </ul>
-  
+
 </ul>

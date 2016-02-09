@@ -17,12 +17,13 @@ app.get('/search', function(req, res) {
   data.participants = {}
   var api_key = 'f2a72364-5518-4e2d-8d4e-d5809314d16d';
   var s_toSearch = req.query.summoner.toLowerCase();
+  var region = req.query.region;
 
   function get_champName(participant, callback) {
     console.log('name=' + participant.summName + ', id=' + participant.championId)
     var champ_json;
 
-    var URL = 'https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion/' + participant.championId + '?api_key=' + api_key;
+    var URL = 'https://na.api.pvp.net/api/lol/static-data/' + region +'/v1.2/champion/' + participant.championId + '?api_key=' + api_key;
     request(URL, function(err, response, body) {
       if(!err && response.statusCode == 200) {
         champ_json = JSON.parse(body);
@@ -40,7 +41,7 @@ app.get('/search', function(req, res) {
   async.waterfall([
     //Searches for summoner
     function(callback) {
-      var URL = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' + s_toSearch + '?api_key=' + api_key;
+      var URL = 'https://na.api.pvp.net/api/lol/' + region +'/v1.4/summoner/by-name/' + s_toSearch + '?api_key=' + api_key;
       request(URL, function(err, response, body) {
         if(!err && response.statusCode == 200) {
           var json = JSON.parse(body);
@@ -76,7 +77,7 @@ app.get('/search', function(req, res) {
             console.log('name=' + participant.summName + ', id=' + participant.championId)
             var champ_json;
 
-            var URL = 'https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion/' + participant.championId + '?api_key=' + api_key;
+            var URL = 'https://na.api.pvp.net/api/lol/static-data/' + region +'/v1.2/champion/' + participant.championId + '?api_key=' + api_key;
             request(URL, function(err, response, body) {
               if(!err && response.statusCode == 200) {
                 champ_json = JSON.parse(body);
