@@ -1,0 +1,14 @@
+<form action="/search" method="get">
+  <input type="text" id="summoner" name="summoner" placeholder="Summoner Name">
+</form>
+<ul>
+  <li>{{info.id}}</li>
+  <li>{{info.name}}</li>
+
+  <ul class="info.summId">
+  	{{#each info.participants}}
+  	<li>{{teamId}} {{summName}}: {{championName}}</li>
+  	{{/each}}
+  </ul>
+  
+</ul>

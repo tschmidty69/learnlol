@@ -1,0 +1,20 @@
+{
+  "name": "node-express-handlebars",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "async": "^1.5.2",
+    "express": "^4.13.3",
+    "express-handlebars": "^2.0.1",
+    "express3-handlebars": "^0.5.2",
+    "lol-js": "^2.0.1",
+    "request": "^2.67.0",
+    "wikijs": "^0.1.3"
+  }
+}
