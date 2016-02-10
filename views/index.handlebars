@@ -17,10 +17,31 @@
 <ul>
   {{info.name}}
 
-  <ul class="info.summId">
+  <table class="table table-striped" border="1" style="width:100%">
+    <thead>
+    <tr>
+      <th>Team</th>
+      <th>Summoner</th>
+      <th>Champ</th>
+      <th>Passive</th>
+      <th>Q</th>
+      <th>E</th>
+      <th>W</th>
+      <th>R</th>
+    </tr>
   	{{#each info.participants}}
-  	<li>{{teamId}} {{summName}}: {{championName}}</li>
+  	<tr>
+      <td>{{teamId}}</td>
+      <td>{{summName}}</td>
+      <td> {{championInfo.name}}</td>
+      <td> {{championInfo.passive.name}}<br>{{{championInfo.passive.description}}}</td>
+        {{#each championInfo.spells}}
+          <td> {{name}}<br>{{{tooltip}}}</td>
+        {{/each}}
+
+    </tr>
   	{{/each}}
-  </ul>
+
+  </table>
 
 </ul>

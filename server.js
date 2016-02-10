@@ -47,7 +47,7 @@ app.get('/search', function(req, res) {
           var json = JSON.parse(body);
           data.id = json[s_toSearch].id;
           data.name = json[s_toSearch].name;
-          console.log("Searched for summoner: " + json[s_toSearch].name)
+          console.log("Searched for summoner: " + json[s_toSearch].name + ' in region ' + region)
           // So here it worked and we move to next function
           callback(null, data);
         } else {
@@ -77,13 +77,14 @@ app.get('/search', function(req, res) {
             console.log('name=' + participant.summName + ', id=' + participant.championId)
             var champ_json;
 
-            var URL = 'https://na.api.pvp.net/api/lol/static-data/' + region +'/v1.2/champion/' + participant.championId + '?api_key=' + api_key;
+            var URL = 'https://global.api.pvp.net/api/lol/static-data/' + region +'/v1.2/champion/' + participant.championId + '?champData=passive,spells&api_key=' + api_key;
+            console.log(URL)
             request(URL, function(err, response, body) {
               if(!err && response.statusCode == 200) {
                 champ_json = JSON.parse(body);
                 //console.log(util.inspect(champ_json, {showHidden: false, depth: null}));
-                participant.championName = champ_json.name;
-                console.log(participant.summName + ' playing ' + participant.championName)
+                participant.championInfo = champ_json;
+                console.log(participant.summName + ' playing ' + champ_json.name);
               } else {
                 console.log(err);
               }
