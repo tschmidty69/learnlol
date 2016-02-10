@@ -13,7 +13,6 @@
     "express": "^4.13.4",
     "express-handlebars": "^2.0.1",
     "express3-handlebars": "^0.5.2",
-    "lol-js": "^2.0.1",
     "request": "^2.69.0",
     "wikijs": "^0.1.3"
   }
