@@ -1,13 +1,13 @@
 <html>
 <head>
 <style>
-body { background-color: linen; }
+/*body { background-color: linen; }*/
 h1 { color: maroon; margin-left: 40px; } 
 table { border-collapse: collapse; }
 th { background-color: #4CAF50; color: white; }
 
 table, th, td { border: 1px solid black; vertical-align: top; }
-tr:hover {background-color: #f5f5f5}
+/*tr:hover {background-color: #f5f5f5}*/
 tr:nth-child(even) {background-color: #f2f2f2}
 
 </style>
@@ -33,9 +33,7 @@ tr:nth-child(even) {background-color: #f2f2f2}
   <table class="table table-striped" style="width:100%">
     <thead>
     <tr>
-      <th>Team</th>
-      <th>Summoner</th>
-      <th>Champ</th>
+      <th>Team<br>Summoner<br>Champ</th>
       <th>Passive</th>
       <th>Q</th>
       <th>E</th>
@@ -44,9 +42,7 @@ tr:nth-child(even) {background-color: #f2f2f2}
     </tr>
   	{{#each info.participants}}
   	<tr>
-      <td>{{teamId}}</td>
-      <td>{{summName}}</td>
-      <td> {{championInfo.name}}</td>
+      <td>{{teamId}}<br>{{summName}}<br>{{championInfo.name}}</td>
       <td> {{championInfo.passive.name}}<p>{{{championInfo.passive.description}}}</td>
         {{#each championInfo.spells}}
           <td> cost: {{costBurn}}<br>cooldown: {{cooldownBurn}}</p>{{name}}</p>{{{tooltip}}}</td>
