@@ -36,7 +36,7 @@
       <td> {{championInfo.name}}</td>
       <td> {{championInfo.passive.name}}<br>{{{championInfo.passive.description}}}</td>
         {{#each championInfo.spells}}
-          <td> {{name}}<br>{{{tooltip}}}</td>
+          <td> cost: {{costBurn}} cooldown: {{cooldownBurn}}</p>{{name}}</p>{{{tooltip}}}</td>
         {{/each}}
 
     </tr>

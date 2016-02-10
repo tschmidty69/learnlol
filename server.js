@@ -4,9 +4,12 @@ var exphbs = require('express-handlebars');
 var request = require('request');
 var async = require('async');
 var util = require('util');
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 
+app.engine('handlebars', exphbs({defaultLayout: '/opt/learnlol/views/layouts/main'}));
+
+app.set('views', '/opt/learnlol/views/');
 app.set('view engine', 'handlebars');
+
 
 app.get('/', function(req, res) {
   res.render('index');
@@ -19,29 +22,11 @@ app.get('/search', function(req, res) {
   var s_toSearch = req.query.summoner.toLowerCase();
   var region = req.query.region;
 
-  function get_champName(participant, callback) {
-    console.log('name=' + participant.summName + ', id=' + participant.championId)
-    var champ_json;
-
-    var URL = 'https://na.api.pvp.net/api/lol/static-data/' + region +'/v1.2/champion/' + participant.championId + '?api_key=' + api_key;
-    request(URL, function(err, response, body) {
-      if(!err && response.statusCode == 200) {
-        champ_json = JSON.parse(body);
-        console.log(util.inspect(champ_json, {showHidden: false, depth: null}));
-        participant.championName = champ_json.name;
-      } else {
-        console.log(err);
-      }
-    });
-    //console.log('d=' + d);
-    //console.log(data.participants[d].championName);
-}
-
-
   async.waterfall([
     //Searches for summoner
     function(callback) {
-      var URL = 'https://na.api.pvp.net/api/lol/' + region +'/v1.4/summoner/by-name/' + s_toSearch + '?api_key=' + api_key;
+      var URL = 'https://' + region + '.api.pvp.net/api/lol/' + region +'/v1.4/summoner/by-name/' + s_toSearch + '?api_key=' + api_key;
+      console.log(URL);
       request(URL, function(err, response, body) {
         if(!err && response.statusCode == 200) {
           var json = JSON.parse(body);
@@ -49,15 +34,19 @@ app.get('/search', function(req, res) {
           data.name = json[s_toSearch].name;
           console.log("Searched for summoner: " + json[s_toSearch].name + ' in region ' + region)
           // So here it worked and we move to next function
-          callback(null, data);
+          //callback(null, data);
         } else {
+          data.name=s_toSearch+ 'Summoner not currently in game';
+          console.log(data.name);
           console.log(err);
         }
+        callback(null, data);
       });
     },
     // Fetches list of participants
     function(data, callback) {
-      var URL = 'https://na.api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/NA1/' + data.id + '?api_key=' + api_key;
+      var URL = 'https://' + region + '.api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/' + region.toUpperCase() + '1/' + data.id + '?api_key=' + api_key;
+      console.log(URL);
       request(URL, function(err, response, body) {
         if(!err && response.statusCode == 200) {
           var summId = 0;
@@ -91,7 +80,9 @@ app.get('/search', function(req, res) {
               callback();
             });
           }, function(err) {
-            if (err) { console.log(err); }
+            if (err) { 
+              console.log('static-data error:' + err); 
+            }
             else {
               console.log('Loops finished?');
               callback(null, data);
@@ -101,7 +92,8 @@ app.get('/search', function(req, res) {
 
           //console.log('data length=' + json['participants'].length)
         } else {
-          console.log(err);
+          console.log('getSpectatorGameInfo error: ' + err);
+          callback(null, data);
         }
       });
     },
@@ -145,8 +137,8 @@ app.get('/search', function(req, res) {
   });
 });
 
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+var server_port = 8080;
+var server_ip_address = '0.0.0.0';
 
 console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
-app.listen(server_port);
+app.listen(server_port, server_ip_address);
