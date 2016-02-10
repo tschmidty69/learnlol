@@ -1,4 +1,17 @@
+<html>
+<head>
+<style>
+body { background-color: linen; }
+h1 { color: maroon; margin-left: 40px; } 
+table { border-collapse: collapse; }
+th { background-color: #4CAF50; color: white; }
 
+table, th, td { border: 1px solid black; vertical-align: top; }
+tr:hover {background-color: #f5f5f5}
+tr:nth-child(even) {background-color: #f2f2f2}
+
+</style>
+</head>
 <form action="/search" method="get">
   <select name="region">
     <option value="na" selected>NA</option>
@@ -17,7 +30,7 @@
 <ul>
   {{info.name}}
 
-  <table class="table table-striped" border="1" style="width:100%">
+  <table class="table table-striped" style="width:100%">
     <thead>
     <tr>
       <th>Team</th>
@@ -34,9 +47,9 @@
       <td>{{teamId}}</td>
       <td>{{summName}}</td>
       <td> {{championInfo.name}}</td>
-      <td> {{championInfo.passive.name}}<br>{{{championInfo.passive.description}}}</td>
+      <td> {{championInfo.passive.name}}<p>{{{championInfo.passive.description}}}</td>
         {{#each championInfo.spells}}
-          <td> cost: {{costBurn}} cooldown: {{cooldownBurn}}</p>{{name}}</p>{{{tooltip}}}</td>
+          <td> cost: {{costBurn}}<br>cooldown: {{cooldownBurn}}</p>{{name}}</p>{{{tooltip}}}</td>
         {{/each}}
 
     </tr>
@@ -45,3 +58,4 @@
   </table>
 
 </ul>
+</html>
