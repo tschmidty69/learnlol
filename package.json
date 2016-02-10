@@ -1,20 +1,20 @@
 {
   "name": "node-express-handlebars",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "author": "Tod Schmidt",
+  "license": "GPL-3.0",
+  "description": "Web App for Display champ infor for current LOL match",
   "dependencies": {
     "async": "^1.5.2",
-    "express": "^4.13.3",
+    "express": "^4.13.4",
     "express-handlebars": "^2.0.1",
     "express3-handlebars": "^0.5.2",
     "lol-js": "^2.0.1",
-    "request": "^2.67.0",
+    "request": "^2.69.0",
     "wikijs": "^0.1.3"
   }
 }
