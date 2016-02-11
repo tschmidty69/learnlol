@@ -4,9 +4,30 @@ var exphbs = require('express-handlebars');
 var request = require('request');
 var async = require('async');
 var util = require('util');
+var handlebars = require('handlebars');
 
-app.engine('handlebars', exphbs({defaultLayout: '/opt/learnlol/views/layouts/main'}));
+var hbs = exphbs.create({
+  defaultLayout: '/opt/learnlol/views/layouts/main',
+  helpers: {
+    expand_spell: function(spell) { 
+      console.log('tooltip: ' + spell.tooltip);
+      var template_string = JSON.stringify(spell.tooltip);
+      spell.e1 = spell.effectBurn[1];
+      spell.e2 = spell.effectBurn[2];
+      spell.e3 = spell.effectBurn[3];
+      spell.e4 = spell.effectBurn[4];
+      spell.e5 = spell.effectBurn[5];
+      //console.log('SPELL: ' + template_string);
+      var template = handlebars.compile(template_string);
+      //console.log(template(spell));
+      return template(spell);
+    }
+  }
 
+});
+
+//app.engine('handlebars', exphbs({defaultLayout: '/opt/learnlol/views/layouts/main'}));
+app.engine('handlebars', hbs.engine);
 app.set('views', '/opt/learnlol/views/');
 app.set('view engine', 'handlebars');
 

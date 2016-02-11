@@ -13,10 +13,6 @@ tr:nth-child(even) {background-color: #f2f2f2}
 </style>
 </head>
 
-Handlebars.registerHelper('expand_spell', function(options) {
-  return options.fn(this);
-});
-
 <form action="/search" method="get">
   <select name="region">
     <option value="na" selected>NA</option>
@@ -50,7 +46,7 @@ Handlebars.registerHelper('expand_spell', function(options) {
       <td>{{teamId}}<br>{{summName}}<br>{{championInfo.name}}</td>
       <td> {{championInfo.passive.name}}<p>{{{championInfo.passive.description}}}</td>
         {{#each championInfo.spells}}
-          <td> cost: {{costBurn}}<br>cooldown: {{cooldownBurn}}</p>{{name}}</p>{{#expand_spell}}{{{tooltip}}}{{/expand_spell}}</td>
+          <td> cost: {{costBurn}}<br>cooldown: {{cooldownBurn}}<br>range: {{rangeBurn}}</p>{{name}}</p>{{#expand_spell this}}{{/expand_spell}}</td>
         {{/each}}
 
     </tr>
