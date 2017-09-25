@@ -10,24 +10,27 @@ table, th, td { border: 1px solid black; vertical-align: top; }
 /*tr:hover {background-color: #f5f5f5}*/
 tr:nth-child(even) {background-color: #f2f2f2}
 
-</style>
-</head>
-
+/*
 Handlebars.registerHelper('expand_spell', function(options) {
   return options.fn(this);
 });
+*/
+
+</style>
+</head>
+
 
 <form action="/search" method="get">
   <select name="region">
-    <option value="na" selected>NA</option>
-    <option value="br">BR</option>
-    <option value="eune">EUNE</option>
-    <option value="euw">EUW</option>
+    <option value="na1" selected>NA</option>
+    <option value="br1">BR</option>
+    <option value="eun1">EUNE</option>
+    <option value="euw1">EUW</option>
     <option value="kr">KR</option>
-    <option value="lan">LAN</option>
-    <option value="las">LAS</option>
-    <option value="oce">OCE</option>
-    <option value="tr">TR</option>
+    <option value="la1">LAN</option>
+    <option value="la2">LAS</option>
+    <option value="oc1">OCE</option>
+    <option value="tr1">TR</option>
     <option value="ru">RU</option>
   </select>
   <input type="text" id="summoner" name="summoner" placeholder="Summoner Name">
@@ -38,7 +41,7 @@ Handlebars.registerHelper('expand_spell', function(options) {
   <table class="table table-striped" style="width:100%">
     <thead>
     <tr>
-      <th>Team<br>Summoner<br>Champ</th>
+      <th>Summoner Champ</th>
       <th>Passive</th>
       <th>Q</th>
       <th>E</th>
@@ -47,12 +50,26 @@ Handlebars.registerHelper('expand_spell', function(options) {
     </tr>
   	{{#each info.participants}}
   	<tr>
-      <td>{{teamId}}<br>{{summName}}<br>{{championInfo.name}}</td>
+{{!-- Summoner Block --}}
+  {{#if teamId }}
+    <td bgcolor="LightSkyBlue">     
+  {{else}}
+    <td bgcolor="IndianRed">
+  {{/if}}
+{{summName}} {{championInfo.name}}</td>
+{{!-- Summoner Block --}}
+
+{{!-- Champ Pic here --}}
+
+{{!-- Passive Block --}}
       <td> {{championInfo.passive.name}}<p>{{{championInfo.passive.description}}}</td>
+{{!-- Passive Block --}}
+
+{{!-- Spells Block -- TODO: Handle multiple forms}}
         {{#each championInfo.spells}}
           <td> cost: {{costBurn}}<br>cooldown: {{cooldownBurn}}</p>{{name}}</p>{{#expand_spell}}{{{tooltip}}}{{/expand_spell}}</td>
         {{/each}}
-
+{{!-- /Spells Block --}}
     </tr>
   	{{/each}}
 

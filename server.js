@@ -4,10 +4,18 @@ var exphbs = require('express-handlebars');
 var request = require('request');
 var async = require('async');
 var util = require('util');
+var jsonfile = require('jsonfile');
 
-app.engine('handlebars', exphbs({defaultLayout: '/opt/learnlol/views/layouts/main'}));
+var app_base = 'C:/Users/tschmidt/Documents/WORK/learnlol/';
+var lol_patch = '7.18.1';
+var lol_lang = 'en_us';
+	
+var fs = require('fs');
+var obj = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' + lol_patch + '/data/' + lol_lang + '/championFull.json', 'utf8'));
 
-app.set('views', '/opt/learnlol/views/');
+ app.engine('handlebars', exphbs({defaultLayout: app_base + '/views/layouts/main'}));
+
+app.set('views', 'views/');
 app.set('view engine', 'handlebars');
 
 
@@ -18,21 +26,23 @@ app.get('/', function(req, res) {
 app.get('/search', function(req, res) {
   var data = {};
   data.participants = {}
-  var api_key = 'f2a72364-5518-4e2d-8d4e-d5809314d16d';
+  var api_key = 'RGAPI-e04a77eb-22f1-41fd-a609-acfd44632597';
   var s_toSearch = req.query.summoner.toLowerCase();
   var region = req.query.region;
 
   async.waterfall([
     //Searches for summoner
+
     function(callback) {
-      var URL = 'https://' + region + '.api.pvp.net/api/lol/' + region +'/v1.4/summoner/by-name/' + s_toSearch + '?api_key=' + api_key;
+      var URL = 'https://' + region + '.api.riotgames.com/lol/summoner/v3/summoners/by-name/' + s_toSearch + '?api_key=' + api_key;
       console.log(URL);
       request(URL, function(err, response, body) {
         if(!err && response.statusCode == 200) {
           var json = JSON.parse(body);
-          data.id = json[s_toSearch].id;
-          data.name = json[s_toSearch].name;
-          console.log("Searched for summoner: " + json[s_toSearch].name + ' in region ' + region)
+          console.log(json);
+          data.id = json.id;
+          data.name = json.name;
+          console.log("Searched for summoner: " + json.name + ' in region ' + region)
           // So here it worked and we move to next function
           //callback(null, data);
         } else {
@@ -43,9 +53,10 @@ app.get('/search', function(req, res) {
         callback(null, data);
       });
     },
+
     // Fetches list of participants
     function(data, callback) {
-      var URL = 'https://' + region + '.api.pvp.net/observer-mode/rest/consumer/getSpectatorGameInfo/' + region.toUpperCase() + '1/' + data.id + '?api_key=' + api_key;
+      var URL = 'https://' + region + '.api.riotgames.com/lol/spectator/v3/active-games/by-summoner/' + data.id + '?api_key=' + api_key;
       console.log(URL);
       request(URL, function(err, response, body) {
         if(!err && response.statusCode == 200) {
@@ -58,36 +69,41 @@ app.get('/search', function(req, res) {
             data.participants[c] = {};
             data.participants[c].summId = json['participants'][c].summonerId;
             data.participants[c].summName = json['participants'][c].summonerName;
-            data.participants[c].teamId = json['participants'][c].teamId;
+            // blue = 0; red = 1
+            if(json['participants'][c].teamId == '100') { data.participants[c].teamId = 0; }
+            else {  data.participants[c].teamId = 1; }
             data.participants[c].championId = json['participants'][c].championId;
             console.log(json['participants'][c].summonerName + ':' + json['participants'][c].summonerId + ':' + json['participants'][c].championName)
           }
           async.each(data.participants, function(participant, callback) {
             console.log('name=' + participant.summName + ', id=' + participant.championId)
+/*
             var champ_json;
-
-            var URL = 'https://global.api.pvp.net/api/lol/static-data/' + region +'/v1.2/champion/' + participant.championId + '?champData=passive,spells&api_key=' + api_key;
-            console.log(URL)
+            var URL = 'https://' + region + '.api.riotgames.com/lol/static-data/v3/champions/' + participant.championId + '?locale=en_US&tags=passive&tags=spells&api_key=' + api_key;
+						
+            //console.log(URL)
             request(URL, function(err, response, body) {
-              if(!err && response.statusCode == 200) {
+            
                 champ_json = JSON.parse(body);
                 //console.log(util.inspect(champ_json, {showHidden: false, depth: null}));
                 participant.championInfo = champ_json;
-                console.log(participant.summName + ' playing ' + champ_json.name);
+                //console.log(participant.summName + ' playing ' + champ_json.name);
               } else {
-                console.log(err);
+                console.error(body, err);
               }
               callback();
             });
+*/
           }, function(err) {
             if (err) { 
               console.log('static-data error:' + err); 
             }
             else {
-              console.log('Loops finished?');
+              console.log('Loops finished');
               callback(null, data);
             }
           });
+
           // We are done go to next function
 
           //console.log('data length=' + json['participants'].length)
@@ -98,7 +114,8 @@ app.get('/search', function(req, res) {
       });
     },
     // Now here is where it gets tricky for me
-/*    function(data, callback) {
+/*
+    function(data, callback) {
       console.log('data length=' + data.participants.length)
       for( var d = 0; d < data.participants.length; d++) {
         var champ_json;
