@@ -13,10 +13,32 @@ var lol_lang = 'en_us';
 var fs = require('fs');
 var obj = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' + lol_patch + '/data/' + lol_lang + '/championFull.json', 'utf8'));
 
- app.engine('handlebars', exphbs({defaultLayout: app_base + '/views/layouts/main'}));
+app.engine('handlebars', exphbs({defaultLayout: app_base + '/views/layouts/main'}));
 
 app.set('views', 'views/');
-app.set('view engine', 'handlebars');
+var handlebars = require('handlebars');
+
+var hbs = exphbs.create({
+  defaultLayout: 'views/layouts/main',
+  helpers: {
+    expand_spell: function(spell) { 
+      console.log('tooltip: ' + spell.tooltip);
+      var template_string = JSON.stringify(spell.tooltip);
+      spell.e1 = spell.effectBurn[1];
+      spell.e2 = spell.effectBurn[2];
+      spell.e3 = spell.effectBurn[3];
+      spell.e4 = spell.effectBurn[4];
+      spell.e5 = spell.effectBurn[5];
+      //console.log('SPELL: ' + template_string);
+      var template = handlebars.compile(template_string);
+      //console.log(template(spell));
+      return template(spell);
+    }
+  }
+
+});
+
+//app.engine('handlebars', exphbs({defaultLayout: '/opt/learnlol/views/layouts/main'}));
 
 
 app.get('/', function(req, res) {

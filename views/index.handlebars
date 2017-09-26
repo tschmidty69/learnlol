@@ -10,6 +10,7 @@ table, th, td { border: 1px solid black; vertical-align: top; }
 /*tr:hover {background-color: #f5f5f5}*/
 tr:nth-child(even) {background-color: #f2f2f2}
 
+<<<<<<< HEAD
 /*
 Handlebars.registerHelper('expand_spell', function(options) {
   return options.fn(this);
@@ -20,6 +21,11 @@ Handlebars.registerHelper('expand_spell', function(options) {
 </head>
 
 
+=======
+</style>
+</head>
+
+>>>>>>> b13fb7f40c585b189f511d4a70491cc8e7974d7d
 <form action="/search" method="get">
   <select name="region">
     <option value="na1" selected>NA</option>
@@ -67,7 +73,7 @@ Handlebars.registerHelper('expand_spell', function(options) {
 
 {{!-- Spells Block -- TODO: Handle multiple forms}}
         {{#each championInfo.spells}}
-          <td> cost: {{costBurn}}<br>cooldown: {{cooldownBurn}}</p>{{name}}</p>{{#expand_spell}}{{{tooltip}}}{{/expand_spell}}</td>
+          <td> cost: {{costBurn}}<br>cooldown: {{cooldownBurn}}<br>range: {{rangeBurn}}</p>{{name}}</p>{{#expand_spell this}}{{/expand_spell}}</td>
         {{/each}}
 {{!-- /Spells Block --}}
     </tr>
