@@ -5,6 +5,7 @@ var request = require('request');
 var async = require('async');
 var util = require('util');
 var jsonfile = require('jsonfile');
+var handlebars = require('handlebars');
 
 var app_base = 'C:/Users/tschmidt/Documents/WORK/learnlol/';
 var lol_patch = '7.18.1';
@@ -16,7 +17,6 @@ var obj = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' 
 app.engine('handlebars', exphbs({defaultLayout: app_base + '/views/layouts/main'}));
 
 app.set('views', 'views/');
-var handlebars = require('handlebars');
 
 var hbs = exphbs.create({
   defaultLayout: 'views/layouts/main',
