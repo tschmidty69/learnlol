@@ -4,24 +4,25 @@ var exphbs = require('express-handlebars');
 var request = require('request');
 var async = require('async');
 var util = require('util');
+var handlebars = require('handlebars');
 var jsonfile = require('jsonfile');
 
-var app_base = 'C:/Users/tschmidt/Documents/WORK/learnlol/';
+var app_base = 'C:/Users/tschmidt/github/learnlol/';
 var lol_patch = '7.18.1';
 var lol_lang = 'en_us';
-	
+
 var fs = require('fs');
-var obj = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' + lol_patch + '/data/' + lol_lang + '/championFull.json', 'utf8'));
+//var obj = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' + lol_patch + '/data/' + lol_lang + '/championFull.json', 'utf8'));
 
 app.engine('handlebars', exphbs({defaultLayout: app_base + '/views/layouts/main'}));
 
-app.set('views', 'views/');
-var handlebars = require('handlebars');
+app.set('views', app_base + 'views/');
+app.set('view engine', 'handlebars');
 
 var hbs = exphbs.create({
   defaultLayout: 'views/layouts/main',
   helpers: {
-    expand_spell: function(spell) { 
+    expand_spell: function(spell) {
       console.log('tooltip: ' + spell.tooltip);
       var template_string = JSON.stringify(spell.tooltip);
       spell.e1 = spell.effectBurn[1];
@@ -37,9 +38,6 @@ var hbs = exphbs.create({
   }
 
 });
-
-//app.engine('handlebars', exphbs({defaultLayout: '/opt/learnlol/views/layouts/main'}));
-
 
 app.get('/', function(req, res) {
   res.render('index');
@@ -102,10 +100,10 @@ app.get('/search', function(req, res) {
 /*
             var champ_json;
             var URL = 'https://' + region + '.api.riotgames.com/lol/static-data/v3/champions/' + participant.championId + '?locale=en_US&tags=passive&tags=spells&api_key=' + api_key;
-						
+
             //console.log(URL)
             request(URL, function(err, response, body) {
-            
+
                 champ_json = JSON.parse(body);
                 //console.log(util.inspect(champ_json, {showHidden: false, depth: null}));
                 participant.championInfo = champ_json;
@@ -117,8 +115,8 @@ app.get('/search', function(req, res) {
             });
 */
           }, function(err) {
-            if (err) { 
-              console.log('static-data error:' + err); 
+            if (err) {
+              console.log('static-data error:' + err);
             }
             else {
               console.log('Loops finished');
