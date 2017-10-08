@@ -37,7 +37,6 @@ Handlebars.registerHelper('expand_spell', function(options) {
 </form>
 <ul>
   {{info.name}}
-
   <table class="table table-striped" style="width:100%">
     <thead>
     <tr>
@@ -48,27 +47,36 @@ Handlebars.registerHelper('expand_spell', function(options) {
       <th>W</th>
       <th>R</th>
     </tr>
-  	{{#each info.participants}}
-  	<tr>
+{{#each info.participants}}
+	<tr>
 {{!-- Summoner Block --}}
   {{#if teamId }}
     <td bgcolor="LightSkyBlue">
   {{else}}
     <td bgcolor="IndianRed">
   {{/if}}
-{{summonerName}}<br />{{championInfo.name}}</td>
+    {{summonerName}}<br />{{championInfo.name}}
+    <img src=http://ddragon.leagueoflegends.com/cdn/{{../info.lol_patch}}/img/champion/{{championInfo.image.full}}><br>
+  </td>
 {{!-- Summoner Block --}}
 
 {{!-- Champ Pic here --}}
 
 {{!-- Passive Block --}}
-      <td> {{championInfo.passive.name}}<p>{{{championInfo.passive.description}}}</td>
+      <td>
+        {{championInfo.passive.name}}<p>
+        <img src=http://ddragon.leagueoflegends.com/cdn/{{../info.lol_patch}}/img/passive/{{championInfo.passive.image.full}}><br>
+        {{{championInfo.passive.description}}}
+      </td>
 {{!-- Passive Block --}}
 
-{{!-- Spells Block -- TODO: Handle multiple forms}}
-        {{#each championInfo.spells}}
-          <td> cost: {{costBurn}}<br>cooldown: {{cooldownBurn}}<br>range: {{rangeBurn}}</p>{{name}}</p>{{#expand_spell this}}{{/expand_spell}}</td>
-        {{/each}}
+{{!-- Spells Block -- TODO: Handle multiple forms --}}
+      {{#each championInfo.spells}}
+        <td>{{name}}</p>
+          <img src=http://ddragon.leagueoflegends.com/cdn/{{../../info.lol_patch}}/img/spell/{{image.full}}><br>
+          cooldown: {{cooldownBurn}}<br>cost: {{costBurn}}<br>range: {{rangeBurn}}</p>{{{description}}}
+        </td>
+      {{/each}}
 {{!-- /Spells Block --}}
     </tr>
   	{{/each}}

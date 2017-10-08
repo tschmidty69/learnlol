@@ -7,6 +7,12 @@ var util = require('util');
 var handlebars = require('handlebars');
 var jsonfile = require('jsonfile');
 var jsonQuery = require('json-query')
+var hbsHelpers = exphbs.create({
+    helpers: require("./helpers/handlebars.js").helpers,
+    defaultLayout: 'layout',
+    extname: '.hbs'
+});
+
 
 var app_base = 'C:/Users/tschmidt/github/learnlol/';
 var lol_patch = '7.19.1';
@@ -46,6 +52,7 @@ app.get('/', function(req, res) {
 app.get('/search', function(req, res) {
   var dd_champion = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' + lol_patch + '/data/' + lol_lang + '/champion.json', 'utf8'));
   var data = {};
+  data.lol_patch = lol_patch
   data.participants = []
   var api_key = 'RGAPI-a335ccb0-2088-4d4b-afbe-2d1d70a5378d';
   var s_toSearch = req.query.summoner.toLowerCase();
@@ -137,6 +144,7 @@ app.get('/search', function(req, res) {
         var championId = jsonQuery('data[**][key=' + data.participants[d].championId + ']', {data: dd_champion}).value.id
         var championInfo = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' + lol_patch + '/data/' + lol_lang + '/champion/' + championId +'.json', 'utf8'));
         data.participants[d].championInfo = championInfo.data[championId]
+        data.participants[d].lol_patch = lol_patch
         //console.log(util.inspect(data.participants[d].championInfo, {showHidden: false, depth: 1}));
 
         /*var URL = 'https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion/' + data.participants[d].championId + '?api_key=' + api_key;
@@ -153,8 +161,8 @@ app.get('/search', function(req, res) {
         //console.log('d=' + d);
         //console.log(util.inspect(champ_json, {showHidden: false, depth: null}));
         //data.participants[d].championName = champ_json.name;
-        console.log(d, data.participants[d].summonerName, data.participants[d].championInfo.name);
-        console.log(util.inspect(data.participants[d].championInfo.spells, {showHidden: false, depth: 1}));
+        console.log(d, data.participants[d].summonerName, data.participants[d].championInfo.name, data.lol_patch);
+        //console.log(util.inspect(data.participants[d].championInfo.spells, {showHidden: false, depth: 0}));
         //callback(null, data);
 
       }
