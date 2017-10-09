@@ -1,10 +1,10 @@
 <html>
 <head>
 <style>
-/*body { background-color: linen; }*/
+body { background-color: linen; }
 h1 { color: maroon; margin-left: 40px; }
 table { border-collapse: collapse; }
-th { background-color: #4CAF50; color: white; }
+/*th { background-color: #4CAF50; color: white; }*/
 
 table, th, td { border: 1px solid black; verticals-align: top; }
 /*tr:hover {background-color: #f5f5f5}*/
@@ -18,8 +18,6 @@ Handlebars.registerHelper('expand_spell', function(options) {
 
 </style>
 </head>
-
-
 <form action="/search" method="get">
   <select name="region">
     <option value="na1" selected>NA</option>
@@ -67,6 +65,7 @@ Handlebars.registerHelper('expand_spell', function(options) {
   <input type="submit" name="mysubmit" value="Search for Summner in active game" />
 
 </form>
+{{#if info.inGame}}
 <ul>
   <table class="table table-striped" style="width:100%">
     <thead>
@@ -105,7 +104,8 @@ Handlebars.registerHelper('expand_spell', function(options) {
       {{#each championInfo.spells}}
         <td>{{name}}</p>
           <img src=http://ddragon.leagueoflegends.com/cdn/{{../../info.lol_patch}}/img/spell/{{image.full}}><br>
-          cooldown: {{cooldownBurn}}<br>cost: {{costBurn}}<br>range: {{rangeBurn}}</p>{{{tooltip}}}
+          cooldown: {{cooldownBurn}}<br>cost: {{costBurn}}<br>range: {{rangeBurn}}
+          <p>{{#expand_spell this}}{{/expand_spell}}
         </td>
       {{/each}}
 {{!-- /Spells Block --}}
@@ -115,4 +115,9 @@ Handlebars.registerHelper('expand_spell', function(options) {
   </table>
 
 </ul>
+{{else}}
+<p>
+  Summoner {{ info.name}} is not currently in a game.
+{{/if}}
+
 </html>

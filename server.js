@@ -17,19 +17,28 @@ var hbs = exphbs.create({
   defaultLayout: 'main',
   helpers: {
     expand_spell: function(spell) {
-      console.log('tooltip: ' + spell.tooltip);
-      var template_string = JSON.stringify(spell.tooltip);
+      //var template_string = JSON.stringify(spell.tooltip);
       spell.e1 = spell.effectBurn[1];
       spell.e2 = spell.effectBurn[2];
       spell.e3 = spell.effectBurn[3];
       spell.e4 = spell.effectBurn[4];
       spell.e5 = spell.effectBurn[5];
-      //console.log('SPELL: ' + template_string);
-//      var template = hbs.compile(template_string);
-      //console.log(template(spell));
-//      return template(spell);
-      return spell;
+      spell.e6 = spell.effectBurn[6];
+      spell.e7 = spell.effectBurn[7];
+      spell.f1 = spell.effectBurn[7];
+      spell.e8 = spell.effectBurn[8];
+      spell.e9 = spell.effectBurn[9];
+      var spellA1 = jsonQuery('vars[**][key=a1]', {data: spell}).value
+      if ( spellA1 && spellA1.link === 'spelldamage') { spell.a1 = spellA1.coeff*100 + '% of ability power'}
+      var template = hbs.handlebars.compile(spell.tooltip);
+      console.log(util.inspect(spell, {showHidden: false, depth: 2}));
+      console.log('tooltip: ' + spell.tooltip);
+      //console.log('template_string: ' + template_string);
+      //console.log('Spell: ' + template(spell.tooltip));
+      console.log('Spell: ' + template(spell));
 
+      return template(spell);
+      //return spell;
     }
   }
 });
@@ -47,7 +56,7 @@ app.get('/search', function(req, res) {
   var data = {};
   data.lol_patch = lol_patch
   data.participants = []
-  var api_key = 'RGAPI-a335ccb0-2088-4d4b-afbe-2d1d70a5378d';
+  var api_key = 'RGAPI-5ecf6df7-9092-4080-884e-1fdab122442f';
   var s_toSearch = req.query.summoner.toLowerCase();
   var region = req.query.region;
   var lang = req.query.language;
@@ -62,16 +71,18 @@ app.get('/search', function(req, res) {
         //console.log(body);
         if(!err && response.statusCode == 200) {
           var json = JSON.parse(body);
-          //console.log(json);
+          console.log(json);
           data.id = json.id;
           data.name = json.name;
           console.log("Found summoner " + json.name + ' in region ' + region)
+          data.inGame = true;
           // So here it worked and we move to next function
           callback(null, data);
         } else {
-          data.name=s_toSearch+ ' not currently in game';
-          console.log(data.name);
-          console.log(err);
+          data.name=s_toSearch;
+          console.log(data.name + ' not currently in game');
+          data.inGame = false;
+          if (err) { console.log(err); }
           callback(null, data);
         }
 
@@ -143,7 +154,7 @@ app.get('/search', function(req, res) {
         //console.log(util.inspect(data.participants[d].championInfo, {showHidden: false, depth: 1}));
 
         //data.participants[d].championInfo = championInfo.data[championId]
-        console.log(util.inspect(data.participants[d].championInfo.passive, {showHidden: false, depth: 3}));
+        //console.log(util.inspect(data.participants[d].championInfo.passive, {showHidden: false, depth: 3}));
 
         /*var URL = 'https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion/' + data.participants[d].championId + '?api_key=' + api_key;
         request(URL, function(err, response, body) {
