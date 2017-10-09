@@ -6,7 +6,7 @@ h1 { color: maroon; margin-left: 40px; }
 table { border-collapse: collapse; }
 th { background-color: #4CAF50; color: white; }
 
-table, th, td { border: 1px solid black; vertical-align: top; }
+table, th, td { border: 1px solid black; verticals-align: top; }
 /*tr:hover {background-color: #f5f5f5}*/
 tr:nth-child(even) {background-color: #f2f2f2}
 
@@ -33,10 +33,41 @@ Handlebars.registerHelper('expand_spell', function(options) {
     <option value="tr1">TR</option>
     <option value="ru">RU</option>
   </select>
-  <input type="text" id="summoner" name="summoner" placeholder="Summoner Name">
+  <select name="language">
+    <option value="cs_CZ">cs_CZ</option>
+    <option value="de_DE">de_DE</option>
+    <option value="el_GR">el_GR</option>
+    <option value="en_AU">en_AU</option>
+    <option value="en_GB">en_GB</option>
+    <option value="en_PH">en_PH</option>
+    <option value="en_SG">en_SG</option>
+    <option value="en_US" selected>en_US</option>
+    <option value="es_AR">es_AR</option>
+    <option value="es_ES">es_ES</option>
+    <option value="es_MX">es_MX</option>
+    <option value="fr_FR">fr_FR</option>
+    <option value="hu_HU">hu_HU</option>
+    <option value="id_ID">id_ID</option>
+    <option value="it_IT">it_IT</option>
+    <option value="ja_JP">ja_JP</option>
+    <option value="ko_KR">ko_KR</option>
+    <option value="ms_MY">ms_MY</option>
+    <option value="pl_PL">pl_PL</option>
+    <option value="pt_BR">pt_BR</option>
+    <option value="ro_RO">ro_RO</option>
+    <option value="ru_RU">ru_RU</option>
+    <option value="th_TH">th_TH</option>
+    <option value="tr_TR">tr_TR</option>
+    <option value="vn_VN">vn_VN</option>
+    <option value="zh_CN">zh_CN</option>
+    <option value="zh_MY">zh_MY</option>
+    <option value="zh_TW">zh_TW</option>
+  </select>
+  <input type="text" id="summoner" name="summoner" value="{{info.name}}" placeholder="Summoner Name">
+  <input type="submit" name="mysubmit" value="Search for Summner in active game" />
+
 </form>
 <ul>
-  {{info.name}}
   <table class="table table-striped" style="width:100%">
     <thead>
     <tr>
@@ -74,7 +105,7 @@ Handlebars.registerHelper('expand_spell', function(options) {
       {{#each championInfo.spells}}
         <td>{{name}}</p>
           <img src=http://ddragon.leagueoflegends.com/cdn/{{../../info.lol_patch}}/img/spell/{{image.full}}><br>
-          cooldown: {{cooldownBurn}}<br>cost: {{costBurn}}<br>range: {{rangeBurn}}</p>{{{description}}}
+          cooldown: {{cooldownBurn}}<br>cost: {{costBurn}}<br>range: {{rangeBurn}}</p>{{{tooltip}}}
         </td>
       {{/each}}
 {{!-- /Spells Block --}}

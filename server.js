@@ -4,29 +4,17 @@ var exphbs = require('express-handlebars');
 var request = require('request');
 var async = require('async');
 var util = require('util');
-var handlebars = require('handlebars');
+//var handlebars = require('handlebars');
 var jsonfile = require('jsonfile');
 var jsonQuery = require('json-query')
-var hbsHelpers = exphbs.create({
-    helpers: require("./helpers/handlebars.js").helpers,
-    defaultLayout: 'layout',
-    extname: '.hbs'
-});
-
 
 var app_base = 'C:/Users/tschmidt/github/learnlol/';
 var lol_patch = '7.19.1';
-var lol_lang = 'en_us';
 
 var fs = require('fs');
 
-app.engine('handlebars', exphbs({defaultLayout: app_base + '/views/layouts/main'}));
-
-app.set('views', app_base + 'views/');
-app.set('view engine', 'handlebars');
-
 var hbs = exphbs.create({
-  defaultLayout: 'views/layouts/main',
+  defaultLayout: 'main',
   helpers: {
     expand_spell: function(spell) {
       console.log('tooltip: ' + spell.tooltip);
@@ -37,26 +25,33 @@ var hbs = exphbs.create({
       spell.e4 = spell.effectBurn[4];
       spell.e5 = spell.effectBurn[5];
       //console.log('SPELL: ' + template_string);
-      var template = handlebars.compile(template_string);
+//      var template = hbs.compile(template_string);
       //console.log(template(spell));
-      return template(spell);
+//      return template(spell);
+      return spell;
+
     }
   }
-
 });
+
+app.engine('handlebars', hbs.engine);
+
+app.set('views', app_base + 'views/');
+app.set('view engine', 'handlebars');
 
 app.get('/', function(req, res) {
   res.render('index');
 });
 
 app.get('/search', function(req, res) {
-  var dd_champion = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' + lol_patch + '/data/' + lol_lang + '/champion.json', 'utf8'));
   var data = {};
   data.lol_patch = lol_patch
   data.participants = []
   var api_key = 'RGAPI-a335ccb0-2088-4d4b-afbe-2d1d70a5378d';
   var s_toSearch = req.query.summoner.toLowerCase();
   var region = req.query.region;
+  var lang = req.query.language;
+  var dd_champion = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' + lol_patch + '/data/' + lang + '/championFull.json', 'utf8'));
 
   async.waterfall([
     //Searches for summoner
@@ -142,10 +137,13 @@ app.get('/search', function(req, res) {
         //console.log(d, data.participants[d].summonerName, data.participants[d].championId);
         //console.log(util.inspect(dd_champion, {showHidden: false, depth: null}));
         var championId = jsonQuery('data[**][key=' + data.participants[d].championId + ']', {data: dd_champion}).value.id
-        var championInfo = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' + lol_patch + '/data/' + lol_lang + '/champion/' + championId +'.json', 'utf8'));
-        data.participants[d].championInfo = championInfo.data[championId]
-        data.participants[d].lol_patch = lol_patch
+        data.participants[d].championInfo = jsonQuery('data[**][key=' + data.participants[d].championId + ']', {data: dd_champion}).value
+        //var championInfo = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' + lol_patch + '/data/' + lang + '/champion/' + championId +'.json', 'utf8'));
+
         //console.log(util.inspect(data.participants[d].championInfo, {showHidden: false, depth: 1}));
+
+        //data.participants[d].championInfo = championInfo.data[championId]
+        console.log(util.inspect(data.participants[d].championInfo.passive, {showHidden: false, depth: 3}));
 
         /*var URL = 'https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion/' + data.participants[d].championId + '?api_key=' + api_key;
         request(URL, function(err, response, body) {
