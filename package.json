@@ -25,5 +25,6 @@
     "request": "^2.69.0",
     "jsonfile": "^4.0.0",
     "json-query": "^2.2.0"
+    
   }
 }
