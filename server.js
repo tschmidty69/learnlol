@@ -18,6 +18,8 @@ var hbs = exphbs.create({
   helpers: {
     expand_spell: function(spell) {
       //var template_string = JSON.stringify(spell.tooltip);
+
+      spell.e0 = spell.effectBurn[0];
       spell.e1 = spell.effectBurn[1];
       spell.e2 = spell.effectBurn[2];
       spell.e3 = spell.effectBurn[3];
@@ -25,17 +27,36 @@ var hbs = exphbs.create({
       spell.e5 = spell.effectBurn[5];
       spell.e6 = spell.effectBurn[6];
       spell.e7 = spell.effectBurn[7];
-      spell.f1 = spell.effectBurn[7];
       spell.e8 = spell.effectBurn[8];
       spell.e9 = spell.effectBurn[9];
+
+      spell.f1 = spell.effectBurn[7];
+      spell.f2 = spell.effectBurn[7];
+      spell.f3 = spell.effectBurn[7];
+      spell.f4 = spell.effectBurn[7];
+      spell.f5 = spell.effectBurn[7];
+
+      spell.effect1amount = spell.effect[1][0];
+
       var spellA1 = jsonQuery('vars[**][key=a1]', {data: spell}).value
       if ( spellA1 && spellA1.link === 'spelldamage') { spell.a1 = spellA1.coeff*100 + '% of ability power'}
+      if ( spellA1 && spellA1.link === 'attackdamage') { spell.a1 = spellA1.coeff*100 + '% of attack damage'}
+      if ( spell.tooltip.match( /\{\{ [aef][\.0-9]*\*[0-9]*\ \}\}/ )) {
+        //console.log('Replacing...')
+        spell.tooltip = spell.tooltip.replace( /(f[0-9])\*100/g, '$1')
+        spell['f1'] = spell.f1*100
+        spell['f2'] = spell.f2*100
+        spell['f3'] = spell.f3*100
+      }
+      spell.tooltip = spell.tooltip.replace( /charabilitypower\*\.01/g, spell.a1*.01)
+      spell.tooltip = spell.tooltip.replace( /charabilitypower2\*\.01/g, spell.a1*.01)
       var template = hbs.handlebars.compile(spell.tooltip);
-      console.log(util.inspect(spell, {showHidden: false, depth: 2}));
-      console.log('tooltip: ' + spell.tooltip);
+      //console.log(util.inspect(spell, {showHidden: false, depth: 2}));
+
+      //console.log('tooltip: ' + spell.tooltip);
       //console.log('template_string: ' + template_string);
       //console.log('Spell: ' + template(spell.tooltip));
-      console.log('Spell: ' + template(spell));
+      //console.log('Spell: ' + template(spell));
 
       return template(spell);
       //return spell;
@@ -56,7 +77,7 @@ app.get('/search', function(req, res) {
   var data = {};
   data.lol_patch = lol_patch
   data.participants = []
-  var api_key = 'RGAPI-5ecf6df7-9092-4080-884e-1fdab122442f';
+  var api_key = 'RGAPI-53130b6e-c9f8-4266-9abc-4e65892e039b';
   var s_toSearch = req.query.summoner.toLowerCase();
   var region = req.query.region;
   var lang = req.query.language;
@@ -71,7 +92,7 @@ app.get('/search', function(req, res) {
         //console.log(body);
         if(!err && response.statusCode == 200) {
           var json = JSON.parse(body);
-          console.log(json);
+          //console.log(json);
           data.id = json.id;
           data.name = json.name;
           console.log("Found summoner " + json.name + ' in region ' + region)
@@ -112,14 +133,14 @@ app.get('/search', function(req, res) {
             //console.log(json['participants'][c].summonerName + ':' + json['participants'][c].summonerId + ':' + json['participants'][c].championId)
           }
           async.each(data.participants, function(participant, callback) {
-            console.log('Summoner: ' + participant.summonerName + ', id=' + participant.championId)
+            //console.log('Summoner: ' + participant.summonerName + ', id=' + participant.championId)
 						//console.log('')
           }, function(err) {
             if (err) {
               console.log('static-data error:' + err);
             }
             else {
-              console.log('Loops finished');
+              //console.log('Loops finished');
             }
           });
 
@@ -170,7 +191,7 @@ app.get('/search', function(req, res) {
         //console.log('d=' + d);
         //console.log(util.inspect(champ_json, {showHidden: false, depth: null}));
         //data.participants[d].championName = champ_json.name;
-        console.log(d, data.participants[d].summonerName, data.participants[d].championInfo.name, data.lol_patch);
+        //console.log(d, data.participants[d].summonerName, data.participants[d].championInfo.name, data.lol_patch);
         //console.log(util.inspect(data.participants[d].championInfo.spells, {showHidden: false, depth: 0}));
         //callback(null, data);
 
