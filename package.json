@@ -1,5 +1,5 @@
 {
-  "name": "node-express-handlebars",
+  "name": "learnlol",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
@@ -12,8 +12,20 @@
     "async": "^1.5.2",
     "express": "^4.13.4",
     "express-handlebars": "^2.0.1",
-    "handlebars": "^4.0.5",
-    "request": "^2.69.0"
+    "handlebars": "^4.0.10",
+    "request": "^2.69.0",
+    "jsonfile": "^4.0.0",
+    "json-query": "^2.2.0"
+  },
+  "devDependencies": {
+    "async": "^1.5.2",
+    "express": "^4.13.4",
+    "express-handlebars": "^2.0.1",
+    "handlebars": "^4.0.10",
+    "request": "^2.69.0",
+    "jsonfile": "^4.0.0",
+    "json-query": "^2.2.0"
+
   }
   "devDependencies": {
     "jshint": "latest",
