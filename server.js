@@ -8,7 +8,7 @@ var util = require('util');
 var jsonfile = require('jsonfile');
 var jsonQuery = require('json-query')
 
-var app_base = 'C:/Users/tschmidt/github/learnlol/';
+var app_base = './';
 var lol_patch = '7.19.1';
 
 var fs = require('fs');
