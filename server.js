@@ -9,7 +9,7 @@ var jsonfile = require('jsonfile');
 var jsonQuery = require('json-query')
 
 var app_base = './';
-var lol_patch = '7.19.1';
+var lol_patch = '7.20.2';
 
 var fs = require('fs');
 
@@ -77,7 +77,7 @@ app.get('/search', function(req, res) {
   var data = {};
   data.lol_patch = lol_patch
   data.participants = []
-  var api_key = 'RGAPI-53130b6e-c9f8-4266-9abc-4e65892e039b';
+  var api_key = 'RGAPI-eea83325-ef07-442b-9f65-b0d2e31aafce';
   var s_toSearch = req.query.summoner.toLowerCase();
   var region = req.query.region;
   var lang = req.query.language;
