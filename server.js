@@ -6,20 +6,15 @@ var async = require('async');
 var util = require('util');
 //var handlebars = require('handlebars');
 var jsonfile = require('jsonfile');
-<<<<<<< HEAD
-var handlebars = require('handlebars');
-=======
+svar handlebars = require('handlebars');
 var jsonQuery = require('json-query')
->>>>>>> f864dd324599f829aa5e343c20c7762e57586f5b
 
 var app_base = './';
 var lol_patch = '7.20.2';
 
-<<<<<<< HEAD
 app.set('views', 'views/');
-=======
 var fs = require('fs');
->>>>>>> f864dd324599f829aa5e343c20c7762e57586f5b
+
 
 var hbs = exphbs.create({
   defaultLayout: 'main',
