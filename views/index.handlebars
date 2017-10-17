@@ -1,16 +1,25 @@
 <html>
 <head>
 <style>
-/*body { background-color: linen; }*/
-h1 { color: maroon; margin-left: 40px; } 
+body { background-color: #264040 ; color: white }
+h1 { color: maroon; margin-left: 40px; }
 table { border-collapse: collapse; }
-th { background-color: #4CAF50; color: white; }
+/*th { background-color: #4CAF50; color: white; }*/
+.colorFF8C00 { color: #FF8C00 }
+.colorFF9900 { color: #FF9900 }
+.color99FF99 { color: #99FF99 }
+.colorF88017 { color: #F88017 }
+.color91d7ee { color: #91d7ee }
+.colorFFEB7F { color: #FFEB7F }
+.color8C8C8C { color: #8C8C8C }
+.size16 { font-size: 16px }
+.size18 { font-size: 18px }
 
-table, th, td { border: 1px solid black; vertical-align: top; }
+table, th, td { border: 1px solid white; vertical-align: top; }
 /*tr:hover {background-color: #f5f5f5}*/
-tr:nth-child(even) {background-color: #f2f2f2}
+/*tr:nth-child(even) {background-color: #f2f2f2}*/
 
-<<<<<<< HEAD
+
 /*
 Handlebars.registerHelper('expand_spell', function(options) {
   return options.fn(this);
@@ -19,13 +28,6 @@ Handlebars.registerHelper('expand_spell', function(options) {
 
 </style>
 </head>
-
-
-=======
-</style>
-</head>
-
->>>>>>> b13fb7f40c585b189f511d4a70491cc8e7974d7d
 <form action="/search" method="get">
   <select name="region">
     <option value="na1" selected>NA</option>
@@ -39,11 +41,42 @@ Handlebars.registerHelper('expand_spell', function(options) {
     <option value="tr1">TR</option>
     <option value="ru">RU</option>
   </select>
-  <input type="text" id="summoner" name="summoner" placeholder="Summoner Name">
-</form>
-<ul>
-  {{info.name}}
+  <select name="language">
+    <option value="cs_CZ">cs_CZ</option>
+    <option value="de_DE">de_DE</option>
+    <option value="el_GR">el_GR</option>
+    <option value="en_AU">en_AU</option>
+    <option value="en_GB">en_GB</option>
+    <option value="en_PH">en_PH</option>
+    <option value="en_SG">en_SG</option>
+    <option value="en_US" selected>en_US</option>
+    <option value="es_AR">es_AR</option>
+    <option value="es_ES">es_ES</option>
+    <option value="es_MX">es_MX</option>
+    <option value="fr_FR">fr_FR</option>
+    <option value="hu_HU">hu_HU</option>
+    <option value="id_ID">id_ID</option>
+    <option value="it_IT">it_IT</option>
+    <option value="ja_JP">ja_JP</option>
+    <option value="ko_KR">ko_KR</option>
+    <option value="ms_MY">ms_MY</option>
+    <option value="pl_PL">pl_PL</option>
+    <option value="pt_BR">pt_BR</option>
+    <option value="ro_RO">ro_RO</option>
+    <option value="ru_RU">ru_RU</option>
+    <option value="th_TH">th_TH</option>
+    <option value="tr_TR">tr_TR</option>
+    <option value="vn_VN">vn_VN</option>
+    <option value="zh_CN">zh_CN</option>
+    <option value="zh_MY">zh_MY</option>
+    <option value="zh_TW">zh_TW</option>
+  </select>
+  <input type="text" id="summoner" name="summoner" value="{{info.name}}" placeholder="Summoner Name">
+  <input type="submit" name="mysubmit" value="Search for Summner in active game" />
 
+</form>
+{{#if info.inGame}}
+<ul>
   <table class="table table-striped" style="width:100%">
     <thead>
     <tr>
@@ -54,27 +87,38 @@ Handlebars.registerHelper('expand_spell', function(options) {
       <th>W</th>
       <th>R</th>
     </tr>
-  	{{#each info.participants}}
-  	<tr>
+{{#each info.participants}}
+	<tr>
 {{!-- Summoner Block --}}
   {{#if teamId }}
-    <td bgcolor="LightSkyBlue">     
+    <td bgcolor="LightSkyBlue">
   {{else}}
     <td bgcolor="IndianRed">
   {{/if}}
-{{summName}} {{championInfo.name}}</td>
+    {{summonerName}}<br />{{championInfo.name}}
+    <img src=http://ddragon.leagueoflegends.com/cdn/{{../info.lol_patch}}/img/champion/{{championInfo.image.full}}><br>
+  </td>
 {{!-- Summoner Block --}}
 
 {{!-- Champ Pic here --}}
 
 {{!-- Passive Block --}}
-      <td> {{championInfo.passive.name}}<p>{{{championInfo.passive.description}}}</td>
+
+      <td>
+        {{championInfo.passive.name}}<p>
+        <img src=http://ddragon.leagueoflegends.com/cdn/{{../info.lol_patch}}/img/passive/{{championInfo.passive.image.full}}><br>
+        {{{championInfo.passive.description}}}
+      </td>
 {{!-- Passive Block --}}
 
-{{!-- Spells Block -- TODO: Handle multiple forms}}
-        {{#each championInfo.spells}}
-          <td> cost: {{costBurn}}<br>cooldown: {{cooldownBurn}}<br>range: {{rangeBurn}}</p>{{name}}</p>{{#expand_spell this}}{{/expand_spell}}</td>
-        {{/each}}
+{{!-- Spells Block -- TODO: Handle multiple forms --}}
+      {{#each championInfo.spells}}
+        <td>{{name}}</p>
+          <img src=http://ddragon.leagueoflegends.com/cdn/{{../../info.lol_patch}}/img/spell/{{image.full}}><br>
+          cooldown: {{cooldownBurn}}<br>cost: {{costBurn}}<br>range: {{rangeBurn}}
+          <p>{{#expand_spell this}}{{/expand_spell}}
+        </td>
+      {{/each}}
 {{!-- /Spells Block --}}
     </tr>
   	{{/each}}
@@ -82,4 +126,9 @@ Handlebars.registerHelper('expand_spell', function(options) {
   </table>
 
 </ul>
+{{else}}
+<p>
+  Summoner {{ info.name}} is not currently in a game.
+{{/if}}
+
 </html>
