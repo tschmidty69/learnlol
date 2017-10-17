@@ -81,7 +81,7 @@ app.get('/search', function(req, res) {
   var s_toSearch = req.query.summoner.toLowerCase();
   var region = req.query.region;
   var lang = req.query.language;
-  var dd_champion = JSON.parse(fs.readFileSync(app_base + 'dragontail-' + lol_patch + '/' + lol_patch + '/data/' + lang + '/championFull.json', 'utf8'));
+  var dd_champion = JSON.parse(fs.readFileSync(app_base + 'datadragon/' + lang + '/championFull.json', 'utf8'));
 
   async.waterfall([
     //Searches for summoner
