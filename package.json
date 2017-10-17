@@ -25,6 +25,16 @@
     "request": "^2.69.0",
     "jsonfile": "^4.0.0",
     "json-query": "^2.2.0"
-    
+
   }
+  "devDependencies": {
+    "jshint": "latest",
+    "express": "^4.13.4",
+    "express-handlebars": "^2.0.1",
+    "handlebars": "^4.0.5",
+    "request": "^2.69.0",
+    "jsonfile": "^4.0.0",
+    "json-query": "^2.2.0"
+  },
+
 }
